@@ -1,0 +1,275 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "Uma API para calcular margem de contribuiçao de itens de venda.",
+        "version": "1.0.0",
+        "title": "Margem Certa API",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "tags": [
+        {
+            "name": "Lista MC",
+            "description": "Visualiza lista de itens resumida ou detalhe de item"
+        },
+        {
+            "name": "Adiciona MC",
+            "description": "Adiçao de itens na base de dados"
+        },
+        {
+            "name": "Deleta MC",
+            "description": "Exclusão de itens da base de dados por id"
+        },
+        {
+            "name": "Atualiza MC",
+            "description": "Ediçao de itens da base de dados por id"
+        }
+    ],
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "margem_lista": {
+                "type": "object",
+                "properties": {
+                    "cliente": {
+                        "type": "string"
+                    },
+                    "descricao": {
+                        "type": "string"
+                    },
+                    "proposta": {
+                        "type": "integer"
+                    },
+                    "item": {
+                        "type": "integer"
+                    },
+                    "preco": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "custo": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "margem_abs": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "margem_rel": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                }
+            },
+            "Id": {
+                "type": "integer",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "margem_update": {
+                "type": "object",
+                "properties": {
+                    "cliente": {
+                        "type": "string",
+                        "example": "Brasington Bailey Construction, Inc"
+                    },
+                    "descricao": {
+                        "type": "string",
+                        "example": "RUBBER WASHER NBR OD=3/4in ID= 3/16in TK= 1/8in"
+                    },
+                    "proposta": {
+                        "type": "integer",
+                        "example": 1520
+                    },
+                    "item": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "preco": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 13.56
+                    },
+                    "custo": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 8.56
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/margemcerta": {
+            "post": {
+                "tags": [
+                    "Adiciona MC"
+                ],
+                "summary": "Adiciona uma Margem de Contribuição (mc)",
+                "requestBody": {
+                    "description": "Inseri um novo registro na base de dados",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/margem_update"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/margem_lista"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/margem_lista"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Lista MC"
+                ],
+                "summary": "Lista todas os registros de Margem de Contribuição (mc)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/margem_lista"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/margem_lista"
+                        }
+                    }
+                }
+            }
+        },
+        "/margemcerta/{id}": {
+            "get": {
+                "tags": [
+                    "Lista MC"
+                ],
+                "summary": "Mostra um registro específico de Margem de Contribuição (mc)",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id do Item (MC) ",
+                        "required": true,
+                        "type": "integer",
+                        "schema": {
+                            "$ref": "#/components/schemas/Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/margem_lista"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/margem_lista"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Atualiza MC"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id da MC",
+                        "required": true,
+                        "type": "integer",
+                        "schema": {
+                            "$ref": "#/components/schemas/Id"
+                        }
+                    }
+                ],
+                "summary": "Atualiza um registro específico de Margem de Contribuição (mc)",
+                "requestBody": {
+                    "description": "Atualiza um registro existente na base de dados",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/margem_update"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/margem_lista"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/margem_lista"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Deleta MC"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id da MC",
+                        "required": true,
+                        "type": "integer",
+                        "schema": {
+                            "$ref": "#/components/schemas/Id"
+                        }
+                    }
+                ],
+                "summary": "Deleta um registro específico de Margem de Contribuição (mc)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/components/schemas/margem_lista"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                            "$ref": "#/components/schemas/margem_lista"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
