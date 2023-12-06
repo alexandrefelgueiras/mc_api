@@ -21,8 +21,9 @@ $$\ Margem de Contribuição = Receitas Totais - Custos Varriáveis Totais$$
 
 Onde:
 
-**Receitas Totais** são as vendas totais geradas pela empresa.
-**Custos Variáveis Totais** são os custos diretamente associados à produção ou prestação de serviços, que variam de acordo com o volume de produção ou vendas.
+- **Receitas Totais** são as vendas totais geradas pela empresa.
+
+- **Custos Variáveis Totais** são os custos diretamente associados à produção ou prestação de serviços, que variam de acordo com o volume de produção ou vendas.
 
 A margem de contribuição é uma métrica importante para as empresas, pois fornece informações sobre quanto dinheiro está disponível para cobrir os custos fixos (como aluguel, salários, utilidades) e contribuir para o lucro após a cobertura desses custos. Se a margem de contribuição for negativa, significa que as receitas não são suficientes para cobrir os custos variáveis, e a empresa pode estar operando com prejuízo.
 
@@ -50,7 +51,30 @@ Esta é uma versão simplificada dados sao inseridos como parâmetros de entrada
 
 ### Baixe os arquivos da API necessários do repositório no gitHub
 
+1. Obtenha a URL do Repositorio
 
+Copie a URL a seguir:
+
+```
+git@github.com:alexandrefelgueiras/mc_api.git
+```
+
+2. Escolha um diretorio local:
+
+Abra um terminal ou prompt de comando e navegue até o diretório local onde deseja que os arquivos do repositório sejam baixados.
+
+ - cd caminho/do/seu/diretorio
+
+3. Clone o Repositorio:
+
+Use o comando git-clone seguido da URL do repositorio.
+
+```
+git clone git@github.com:alexandrefelgueiras/mc_api.git
+```
+4. Navegue até o Diretorio escolhido no passo 2
+
+Agora voce deve ter todos os arquivos do repositorio no diretório local.
 
 
 ### Criaçao e Instalaçao de Ambientes Virtuais
@@ -58,7 +82,7 @@ Esta é uma versão simplificada dados sao inseridos como parâmetros de entrada
 A criação de um ambiente virtual no Windows e em sistemas Linux/macOS (OS X) envolve etapas um pouco diferentes. Vomos fornecer instruções passo a passo para ambos os sistemas operacionais:
 
 - [Windows](#windows)
-- [Linux/macOS (OS X)](#linux/macos (os x))
+- [Linux-macOS](#linux-macos)
 
 #### Windows:
 
@@ -94,7 +118,7 @@ python -m venv venv
 ``` 
 venv\scripts\activate
 ```
-#### Linux/macOS (OS X)
+#### Linux-macOS
 
 1. Abra um terminal:
 
@@ -133,13 +157,100 @@ python3 -m venv venv
 ```bash```
 ```
 source .venv/bin/activate
-```
-### Instalaçao das bibliotecas
 
+```
+
+7. Instale as bibliotecas necessárias a aplicaçao.
+
+```
+pip install -r requirements.txt
+```
+8. Crie o banco de dados sqlite
+
+No terminal digite:
+
+```
+python db.py
+```
+9. Configuraçao final
+
+Ao final deste processo o diretorio deve estar com a seguinte arvore de elementos:
+```
+C:caminho/do/seu/diretorio/
+│
+├───venv
+├───database
+│       └ database.db
+├───static
+│       └ swagger.json
+└ db.py
+└ mcAPI.py
+└ README.md
+└ requirements.txt
+```
 
  ## Uso
 
+O uso e testes da API será feito pelo swagger ui, vamos a inicializacao.
+
+1. No terminal code a aplicação fazendo:
+
+```
+python mcAPI.py
+```
+2. No navegador de sua preferencia faça use o seguinte endereço:
+```
+http://127.0.0.1:5000/apidocs
+```
+
+Voce ja esta na tela do swagger pronto para testar as rotas.
+
+![Swagger UI](image.png)
+
+
  ## Endpoints
+
+ Todos os endpoints tem entregam dados JSON, nesse contexto inicial foram criadas 5 rodas
+
+ ```
+ /Lista MC/
+	├ GET /margemcerta - lista todos os registros
+		Parametros de entrada: 
+					- Não aplicável
+
+	├ GET /margemcerta/{id} - lista registro de um id específico
+		Parametros de entrada: 
+					- id
+
+/Adiciona MC/
+	├ POST /margemcerta - adiciona um novo registro
+		Parametros de entrada: 
+					- Cliente: str
+					- Descrição: str
+					- Proposta: int
+					- Item: int
+					- Preço: float
+					- Custo: float
+				
+/Deleta MC/
+	├ DELETE /margemcerta{id} - deleta registro de um id específico
+		Parametros de entrada: 
+					- id
+
+
+/DAtualiza MC/
+	├ PUT /margemcerta{id} - atualiza registro de um id específico
+		Parametros de entrada: 
+					- id
+		Atualizaçao de:
+					- Cliente: str
+					- Descrição: str
+					- Proposta: int
+					- Item: int
+					- Preço: float
+					- Custo: float
+
+ ```
 
  ## Exemplos
 
