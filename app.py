@@ -1,13 +1,28 @@
-from flask import Flask, jsonify, request, make_response
+from flask import (
+    Flask,
+    jsonify,
+    request,
+    make_response,
+    render_template,
+    redirect,
+    url_for,
+)
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_swagger_ui import get_swaggerui_blueprint
+import os
+
+# coletando informacoes do diretorio atual da aplicacao.
+base_dir = os.path.abspath(os.path.dirname(__file__))
 
 # instanciando a aplicação Flask
 app = Flask(__name__)
 
+
 # cria a engine de conexão com o banco
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///%s/database/database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+    base_dir, "database", "database.db"
+)
 
 # desativando o rastreamento de modificações, para evitar o consumo excessivo de memória.
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -100,9 +115,51 @@ def handle_500_error(_error):
     return make_response(jsonify({"error": "Erro no servidor"}), 500)
 
 
+"""
+**********************************************************
+ROTAS DE PAGINA
+*********************************************************
+"""
+
+
+# PAGINA INICIAL
+@app.route("/")
+def home():
+    mc_data = get_mcs().json
+    return render_template("home.html", mcs=mc_data)
+
+
+# FORMULARIO NOVO ITEM
+@app.route("/novo")
+def novo():
+    mc_data = get_mcs().json
+    return render_template("novo.html", titulo="Novo Item", mcs=mc_data)
+
+
+# FORMULARIO VER ITEM
+@app.route("/ver/<int:id>", methods=["GET"])
+def ver(id: int):
+    mc_data = get_mcs().json
+    mc = Mc.query.filter_by(id=id).first()
+    return render_template("ver.html", titulo="Detalhando Item", mcs=mc_data, mc=mc)
+
+
+# FORMULARIO DELETAR ITEM
+@app.route("/deletar/<int:id>", methods=["GET"])
+def deletar(id: int):
+    mc_data = get_mcs().json
+    mc = Mc.query.filter_by(id=id).first()
+    return render_template("deletar.html", titulo="Excluindo Item", mcs=mc_data, mc=mc)
+
+
+"""
+**********************************************************
+ROTAS DE API
+*********************************************************
+"""
+
+
 # adiciona uma Margem de Contribuição (mc)
-
-
 @app.route("/margemcerta", methods=["POST"])
 def add_mc():
     try:
@@ -138,6 +195,13 @@ def get_mcs():
     return jsonify(result_set)
 
 
+# ajuste de formatacao
+@app.template_filter()
+def brl_format(value):
+    value = float(value)
+    return "{:,.2f}".format(value).replace(",", "v").replace(".", ",").replace("v", ".")
+
+
 # lista um registro específico de Margem de Contribuição (mc)
 @app.route("/margemcerta/<int:id>", methods=["GET"])
 def get_mc(id):
@@ -148,7 +212,9 @@ def get_mc(id):
 # atualiza um registro específico de Margem de Contribuição (mc)
 @app.route("/margemcerta/<int:id>", methods=["PUT"])
 def update_mc(id):
+    print(id)
     mc = Mc.query.get_or_404(int(id))
+    print(mc)
 
     try:
         cliente = request.json["cliente"]
@@ -157,6 +223,10 @@ def update_mc(id):
         item = request.json["item"]
         preco = request.json["preco"]
         custo = request.json["custo"]
+
+        print(
+            f"Valores recebidos: {cliente}, {descricao}, {proposta}, {item}, {preco}, {custo}"
+        )
 
         mc.cliente = cliente
         mc.descricao = descricao
@@ -168,6 +238,7 @@ def update_mc(id):
         db.session.commit()
 
     except Exception as e:
+        print(f"Erro na atualização: {e}")
         return jsonify({"Erro": "Requisição invalida, tente novamente."})
 
     return mc_schema.jsonify(mc)
@@ -176,12 +247,20 @@ def update_mc(id):
 # Deleta um registro específico de Margem de Contribuição (mc)
 
 
-@app.route("/margemcerta/<int:id>", methods=["DELETE"])
+@app.route("/margemcerta/<int:id>", methods=["DELETE", "POST"])
 def delete_mc(id):
     mc = Mc.query.get_or_404(int(id))
     db.session.delete(mc)
     db.session.commit()
-    return jsonify({"Sucesso": "Item de Margem de Contribuiçao deletado."})
+    if request.method == "DELETE":
+        return jsonify(
+            {
+                "Sucesso": True,
+                "message": f"Item de Margem de Contribuiçao id({id}) deletado com sucesso.",
+            }
+        )
+    else:
+        return redirect(url_for("home"))
 
 
 if __name__ == "__main__":

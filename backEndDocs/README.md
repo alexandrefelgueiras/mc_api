@@ -47,6 +47,30 @@ Esta é uma versão simplificada dados sao inseridos como parâmetros de entrada
  Versões futuras desta aplicação irão implementar cálculos de compensação de impostos, se aplicável, e adição de outros custos variáveis como comissões de venda.
  Este produto destina-se a ser uma ferramenta muito simples e prática que ajude empresas na precificação de produtos e garantindo mais lucro e reduzindo riscos.
 
+### Descrição Técnica:
+**Framework:** A API é desenvolvida usando o framework Flask em Python, proporcionando simplicidade e flexibilidade para a construção de aplicativos web.
+
+**Persistência de Dados:** Utiliza o SQLite como banco de dados para armazenar as informações sobre a Margem de Contribuição. O SQLAlchemy é empregado para facilitar a interação com o banco de dados e representar os modelos de dados em Python.
+
+**Serialização/Deserialização:** A biblioteca Marshmallow é incorporada para fornecer uma camada de serialização e deserialização de objetos, permitindo a conversão fácil entre objetos Python e representações JSON.
+
+**Documentação Swagger:** A API inclui documentação Swagger gerada automaticamente, acessível através de uma interface gráfica, facilitando a compreensão e teste das operações disponíveis.
+
+**Tratamento de Erros Personalizado:** Implementa tratamento de erros HTTP personalizado para códigos 400, 401, 404 e 500, fornecendo respostas significativas para diferentes situações de erro.
+
+**Renderização de Templates:** Integração com Flask para renderizar templates HTML para páginas web, como a página inicial, formulários de novos itens e detalhes do item.
+
+### Pincipais Vantagens:
+**Simplicidade de Desenvolvimento:** O Flask proporciona um ambiente de desenvolvimento simples e direto, facilitando a criação de APIs de forma eficiente.
+
+**Documentação Automática:** A documentação Swagger é uma vantagem significativa para os desenvolvedores, facilitando a compreensão das rotas e parâmetros disponíveis na API.
+
+**Tratamento de Erros Consistente:** O tratamento de erros personalizado ajuda na comunicação eficaz com os clientes da API, melhorando a experiência de desenvolvimento e depuração.
+
+**Boas Práticas de Organização de Código:** A estrutura do código segue boas práticas, com a definição de modelos, esquemas de serialização, e lógica de roteamento separados, facilitando a manutenção.
+
+**Uso de Ferramentas de Terceiros:** A integração de extensões como Flask-SQLAlchemy, Flask-Marshmallow e Flask-Swagger-UI mostra a utilização eficiente de ferramentas de terceiros para estender a funcionalidade do Flask.
+
  ## Instalação
 
 ### Baixe os arquivos da API necessários do repositório no gitHub
@@ -178,14 +202,16 @@ Ao final deste processo o diretorio deve estar com a seguinte arvore de elemento
 ```
 C:caminho/do/seu/diretorio/
 │
-├───venv
+├───venv/
+├───backEndDocs
+│       └ imgDocs/
+│       └ README.md
 ├───database
 │       └ database.db
 ├───static
 │       └ swagger.json
 └ db.py
-└ mcAPI.py
-└ README.md
+└ app.py
 └ requirements.txt
 ```
 
@@ -205,7 +231,9 @@ http://127.0.0.1:5000/apidocs
 
 Voce ja esta na tela do swagger pronto para testar as rotas.
 
-![Swagger UI](image.png)
+
+
+<img src="imgDocs/swagger_inicial.png" alt="Tela inicial SwaggerUI">
 
 
  ## Endpoints
@@ -254,7 +282,42 @@ Voce ja esta na tela do swagger pronto para testar as rotas.
 
  ## Exemplos
 
- ## Contribuiçao
+### Lista todos os itens de Margem de Contribuiçao
 
- ## Licença
+<img src="imgDocs/swagger_listamcs2.png" alt="Listagem Geral de Itens">
+
+### Lista Uma Margem de Contribuiçao Especifica
+
+Parametro de entrarada {id}
+
+<img src="imgDocs/swagger_listamc_id.png" alt="Lista um item específico">
+
+### Adiciona Novo Item de Margem de Contribuição
+Parametros de entrada:
+{
+  "cliente": "str",
+  "descricao": "str",
+  "proposta": int,
+  "item": int,
+  "preco": float,
+  "custo": float
+}
+
+<img src="imgDocs/swagger_adicionamc.png" alt="Novo item de MC">
+
+### Deleta Item de Margem de Contribuiçao Especifico
+Parametro de entrada: {id}
+
+<img src="imgDocs/swagger_deletamc.png" alt="Deleta item de MC">
+
+
+## Conclusão
+
+A API Margem Certa desenvolvida em Flask para gerenciamento de dados relacionados à "Margem de Contribuição" (MC) apresenta uma implementação robusta e eficiente para suas finalidades. Ao utilizar o framework Flask em conjunto com extensões como SQLAlchemy, Marshmallow e Swagger-UI, o desenvolvedor demonstrou uma abordagem que prioriza simplicidade, flexibilidade e boas práticas de desenvolvimento.
+
+A estrutura do código reflete uma organização clara e modular, com modelos bem definidos, esquemas de serialização e tratamento de erros personalizado. A documentação Swagger incorporada fornece uma ferramenta valiosa para desenvolvedores entenderem e interagirem com a API de forma eficiente.
+
+O tratamento de erros específicos contribui para uma experiência mais amigável tanto no desenvolvimento quanto na utilização da API, transmitindo mensagens claras em resposta a diferentes cenários de erro. A integração do Flask com templates HTML também adiciona uma camada de interface amigável para a interação com a API por meio de páginas web.
+
+Em resumo, a API apresenta uma solução sólida para o gerenciamento de dados de Margem de Contribuição, incorporando práticas modernas de desenvolvimento web. Sua estrutura modular, documentação eficaz e tratamento de erros consistente contribuem para a sua robustez e usabilidade.
 

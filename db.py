@@ -39,7 +39,7 @@ session = Session()
 # Verifica se a tabela "mc" já existe no banco
 inspector = inspect(engine)
 existing_tables = inspector.get_table_names()
-if "mc" not in existing_tables:
+if "mc" in existing_tables:
     # Inserindo dados
     registros_iniciais = [
         {
