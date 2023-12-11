@@ -219,10 +219,10 @@ C:caminho/do/seu/diretorio/
 
 O uso e testes da API será feito pelo swagger ui, vamos a inicializacao.
 
-1. No terminal code a aplicação fazendo:
+1. No terminal rode a aplicação fazendo:
 
 ```
-python mcAPI.py
+python app.py
 ```
 2. No navegador de sua preferencia faça use o seguinte endereço:
 ```
